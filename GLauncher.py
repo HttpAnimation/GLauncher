@@ -44,7 +44,7 @@ root.configure(bg='#2E2E2E')
 text_color = 'white'
 
 sidebar_width = 200
-sidebar = tk.Frame(root, width=sidebar_width, bg='#2E2E2E')  # Dark gray background
+sidebar = tk.Frame(root, width=sidebar_width, bg='#2E2E2E')  
 sidebar.pack(side=tk.LEFT, fill=tk.Y)
 
 switch_button = tk.Button(sidebar, text="Switch", command=update_listbox, bg='#404040', fg=text_color)

@@ -35,6 +35,13 @@ def on_select(event):
         rom_path = os.path.join("roms/switch", selected_game)
         launch_emulator("Switch", rom_path)
 
+try:
+    with open('config/Sidebar.json', 'r') as sidebar_config_file:
+        sidebar_config = json.load(sidebar_config_file)
+        sidebar_width = sidebar_config.get('width', 200)
+except (FileNotFoundError, json.JSONDecodeError, KeyError):
+    sidebar_width = 200  
+
 root = tk.Tk()
 root.title("GLauncher")
 
@@ -44,7 +51,6 @@ root.configure(bg='#2E2E2E')
 
 text_color = 'white'
 
-sidebar_width = 200
 sidebar = tk.Frame(root, width=sidebar_width, bg='#2E2E2E')  
 sidebar.pack(side=tk.LEFT, fill=tk.Y)
 

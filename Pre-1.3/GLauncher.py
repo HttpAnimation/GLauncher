@@ -7,7 +7,6 @@ def get_switch_games(directory):
     switch_games = [file for file in os.listdir(directory) if file.endswith(('.xci', '.nsp'))]
     return switch_games
 
-# Function to launch Ryujinx with the selected ROM
 def launch_ryujinx(rom_path):
     os.system(f"flatpak run org.ryujinx.Ryujinx '{rom_path}'")
 

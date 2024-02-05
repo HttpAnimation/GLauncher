@@ -37,6 +37,8 @@ def on_select(event):
 root = tk.Tk()
 root.title("GLauncher")
 
+root.attributes('-fullscreen', True)
+
 sidebar = tk.Frame(root, width=100, bg='gray')
 sidebar.pack(side=tk.LEFT, fill=tk.Y)
 

@@ -2,13 +2,24 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 import pygame
+import json
 
 def get_switch_games(directory):
     switch_games = [file for file in os.listdir(directory) if file.endswith(('.xci', '.nsp'))]
     return switch_games
 
-def launch_ryujinx(rom_path):
-    os.system(f"flatpak run org.ryujinx.Ryujinx '{rom_path}'")
+def get_emulator_command(emulator_name):
+    try:
+        with open('configs/config.json', 'r') as config_file:
+            config = json.load(config_file)
+            return config.get(emulator_name, "")
+    except (FileNotFoundError, json.JSONDecodeError):
+        return ""
+
+def launch_emulator(emulator_name, rom_path):
+    command = get_emulator_command(emulator_name)
+    if command:
+        os.system(f"{command} '{rom_path}'")
 
 def update_listbox():
     switch_games = get_switch_games("roms/switch")
@@ -21,7 +32,7 @@ def on_select(event):
     if selected_index:
         selected_game = listbox.get(selected_index[0])
         rom_path = os.path.join("roms/switch", selected_game)
-        launch_ryujinx(rom_path)
+        launch_emulator("Switch", rom_path)
 
 root = tk.Tk()
 root.title("GLauncher")

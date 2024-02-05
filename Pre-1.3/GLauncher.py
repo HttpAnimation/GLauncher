@@ -32,7 +32,6 @@ sidebar.pack(side=tk.LEFT, fill=tk.Y)
 switch_button = tk.Button(sidebar, text="Switch", command=update_listbox)
 switch_button.pack(pady=10)
 
-# Create a listbox to display Switch games
 listbox = tk.Listbox(root, selectmode=tk.SINGLE)
 listbox.pack(expand=True, fill=tk.BOTH)
 

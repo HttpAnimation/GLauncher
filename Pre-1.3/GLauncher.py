@@ -1,77 +1,49 @@
-import pygame
+import os
 import tkinter as tk
-from tkinter import ttk
-from pygame.locals import *
-from OpenGL.GL import *
-from OpenGL.GLU import *
+from tkinter import filedialog
+import pygame
 
-cube_vertices = [
-    (-1, -1, -1),
-    (-1, 1, -1),
-    (1, 1, -1),
-    (1, -1, -1),
-    (-1, -1, 1),
-    (-1, 1, 1),
-    (1, 1, 1),
-    (1, -1, 1)
-]
+# Function to get a list of Switch games from the specified directory
+def get_switch_games(directory):
+    switch_games = [file for file in os.listdir(directory) if file.endswith(('.xci', '.nsp'))]
+    return switch_games
 
-cube_edges = [
-    (0, 1), (1, 2), (2, 3), (3, 0),
-    (4, 5), (5, 6), (6, 7), (7, 4),
-    (0, 4), (1, 5), (2, 6), (3, 7)
-]
+# Function to launch Ryujinx with the selected ROM
+def launch_ryujinx(rom_path):
+    os.system(f"flatpak run org.ryujinx.Ryujinx '{rom_path}'")
 
-pygame.init()
+# Function to update the listbox with Switch games
+def update_listbox():
+    switch_games = get_switch_games("roms/switch")
+    listbox.delete(0, tk.END)
+    for game in switch_games:
+        listbox.insert(tk.END, game)
 
-angle_x = 0
-angle_y = 0
+# Function to handle the selection event
+def on_select(event):
+    selected_index = listbox.curselection()
+    if selected_index:
+        selected_game = listbox.get(selected_index[0])
+        rom_path = os.path.join("roms/switch", selected_game)
+        launch_ryujinx(rom_path)
 
-def rotate_cube():
-    global angle_x, angle_y
-
-    angle_x += 1
-    angle_y += 1
-
-    rotated_vertices = []
-    for vertex in cube_vertices:
-        x, y, z = vertex
-
-        y = y * pygame.math.Vector2(1, 0).rotate(angle_x).y - z * pygame.math.Vector2(1, 0).rotate(angle_x).x
-        z = y * pygame.math.Vector2(1, 0).rotate(angle_x).x + z * pygame.math.Vector2(1, 0).rotate(angle_x).y
-
-        x = x * pygame.math.Vector2(0, 1).rotate(angle_y).y - z * pygame.math.Vector2(0, 1).rotate(angle_y).x
-        z = x * pygame.math.Vector2(0, 1).rotate(angle_y).x + z * pygame.math.Vector2(0, 1).rotate(angle_y).y
-
-        rotated_vertices.append((x, y, z))
-
-    return rotated_vertices
-
+# Initialize Tkinter window
 root = tk.Tk()
-root.title("Spinning 3D Cube")
+root.title("Switch Game Launcher")
 
-pygame_screen = pygame.display.set_mode((400, 400), DOUBLEBUF | OPENGL)
-pygame.display.set_caption("Spinning 3D Cube")
+# Create a sidebar with a button to load Switch games
+sidebar = tk.Frame(root, width=100, bg='gray')
+sidebar.pack(side=tk.LEFT, fill=tk.Y)
 
-gluPerspective = pygame.math.Vector3(0, 0, -5)
+switch_button = tk.Button(sidebar, text="Switch", command=update_listbox)
+switch_button.pack(pady=10)
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+# Create a listbox to display Switch games
+listbox = tk.Listbox(root, selectmode=tk.SINGLE)
+listbox.pack(expand=True, fill=tk.BOTH)
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+# Bind the selection event to the on_select function
+listbox.bind("<<ListboxSelect>>", on_select)
 
-    glBegin(GL_LINES)
-    for edge in cube_edges:
-        for vertex in edge:
-            glVertex3fv(rotate_cube()[vertex])
-    glEnd()
-
-    pygame.display.flip()
-    pygame.time.wait(10)
-
-    root.update()
-
-pygame.quit()
+# Run the Tkinter main loop
+root.mainloop()

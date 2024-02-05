@@ -1,59 +1,45 @@
+# main.py
+import os
 import tkinter as tk
 from tkinter import filedialog
-import json
-import switch
+from switch import SwitchConfig
+import subprocess
 
-def get_emulator_command(emulator_name):
-    try:
-        with open('configs/switch.json', 'r') as config_file:
-            config = json.load(config_file)
-            return config.get(emulator_name, "")
-    except (FileNotFoundError, json.JSONDecodeError):
-        return ""
+class SwitchLauncherApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Switch Game Launcher")
+        self.master.attributes('-fullscreen', True)
 
-def launch_emulator(emulator_name, rom_path):
-    command = get_emulator_command(emulator_name)
-    if command:
-        os.system(f"{command} '{rom_path}'")
+        self.switch_config = SwitchConfig()
+        self.supported_formats = self.switch_config.get_supported_formats()
 
-def update_listbox():
-    switch_games = switch.get_switch_games("roms/switch")
-    listbox.delete(0, tk.END)
-    for game in switch_games:
-        listbox.insert(tk.END, game)
+        self.sidebar = tk.Frame(self.master, width=200, bg="lightgray")
+        self.sidebar.pack(side=tk.LEFT, fill=tk.Y)
 
-def on_select(event):
-    selected_index = listbox.curselection()
-    if selected_index:
-        selected_game = listbox.get(selected_index[0])
-        rom_path = os.path.join("roms/switch", selected_game)
-        launch_emulator("Switch", rom_path)
+        self.launch_button = tk.Button(self.sidebar, text="Switch", command=self.load_switch_info)
+        self.launch_button.pack(pady=10)
 
-try:
-    with open('configs/Sidebar.json', 'r') as sidebar_config_file:
-        sidebar_config = json.load(sidebar_config_file)
-        sidebar_width = sidebar_config.get('width', 200)
-except (FileNotFoundError, json.JSONDecodeError, KeyError):
-    sidebar_width = 200  
+        self.games_listbox = tk.Listbox(self.master)
+        self.games_listbox.pack(expand=True, fill=tk.BOTH)
 
-root = tk.Tk()
-root.title("GLauncher")
+        self.load_supported_games()
 
-root.attributes('-fullscreen', True)
+    def load_supported_games(self):
+        roms_path = "roms/switch"
+        for file in os.listdir(roms_path):
+            if file.endswith(tuple(self.supported_formats)):
+                self.games_listbox.insert(tk.END, file)
 
-root.configure(bg='#2E2E2E')
+    def load_switch_info(self):
+        selected_game_index = self.games_listbox.curselection()
+        if selected_game_index:
+            selected_game = self.games_listbox.get(selected_game_index)
+            emulator_command = self.switch_config.get_emulator_command(0) 
+            full_path = os.path.join("roms/switch", selected_game)
+            subprocess.run(emulator_command.split() + [full_path])
 
-text_color = 'white'
-
-sidebar = tk.Frame(root, width=sidebar_width, bg='#2E2E2E')  
-sidebar.pack(side=tk.LEFT, fill=tk.Y)
-
-switch_button = tk.Button(sidebar, text="Switch", command=update_listbox, bg='#404040', fg=text_color)
-switch_button.pack(pady=10)
-
-listbox = tk.Listbox(root, selectmode=tk.SINGLE, bg='#2E2E2E', fg=text_color)  
-listbox.pack(expand=True, fill=tk.BOTH)
-
-listbox.bind("<<ListboxSelect>>", on_select)
-
-root.mainloop()
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = SwitchLauncherApp(root)
+    root.mainloop()

@@ -1,2 +1,2 @@
 # GLauncher/testing/Pre-1.0
-The first version of GLauncher
+The 1-1 version of GLauncher

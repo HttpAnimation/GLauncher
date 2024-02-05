@@ -37,5 +37,4 @@ listbox.pack(expand=True, fill=tk.BOTH)
 
 listbox.bind("<<ListboxSelect>>", on_select)
 
-# Run the Tkinter main loop
 root.mainloop()

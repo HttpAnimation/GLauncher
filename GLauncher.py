@@ -43,7 +43,7 @@ root.configure(bg='#2E2E2E')
 
 text_color = 'white'
 
-sidebar_width = 150
+sidebar_width = 200
 sidebar = tk.Frame(root, width=sidebar_width, bg='#2E2E2E')  # Dark gray background
 sidebar.pack(side=tk.LEFT, fill=tk.Y)
 

@@ -23,7 +23,6 @@ def on_select(event):
         rom_path = os.path.join("roms/switch", selected_game)
         launch_ryujinx(rom_path)
 
-# Initialize Tkinter window
 root = tk.Tk()
 root.title("GLauncher")
 

@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import filedialog
 import pygame
 import json
+import time
 
 def get_switch_games(directory):
     switch_games = [file for file in os.listdir(directory) if file.endswith(('.xci', '.nsp'))]

@@ -1,12 +1,19 @@
 import os
 import tkinter as tk
 from tkinter import filedialog
-import pygame
 import json
-import time
+
+def get_supported_formats():
+    try:
+        with open('configs/formats/switch.json', 'r') as formats_file:
+            formats = json.load(formats_file)
+            return formats.get('supported_formats', ['.xci', '.nsp'])
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        return ['.xci', '.nsp']
 
 def get_switch_games(directory):
-    switch_games = [file for file in os.listdir(directory) if file.endswith(('.xci', '.nsp'))]
+    supported_formats = get_supported_formats()
+    switch_games = [file for file in os.listdir(directory) if file.endswith(tuple(supported_formats))]
     return switch_games
 
 def get_emulator_command(emulator_name):
@@ -36,7 +43,7 @@ def on_select(event):
         launch_emulator("Switch", rom_path)
 
 try:
-    with open('config/Sidebar.json', 'r') as sidebar_config_file:
+    with open('configs/Sidebar.json', 'r') as sidebar_config_file:
         sidebar_config = json.load(sidebar_config_file)
         sidebar_width = sidebar_config.get('width', 200)
 except (FileNotFoundError, json.JSONDecodeError, KeyError):

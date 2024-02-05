@@ -29,7 +29,7 @@ def on_select(event):
 
 # Initialize Tkinter window
 root = tk.Tk()
-root.title("Switch Game Launcher")
+root.title("GLauncher")
 
 # Create a sidebar with a button to load Switch games
 sidebar = tk.Frame(root, width=100, bg='gray')

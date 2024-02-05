@@ -10,7 +10,6 @@ def get_switch_games(directory):
 def launch_ryujinx(rom_path):
     os.system(f"flatpak run org.ryujinx.Ryujinx '{rom_path}'")
 
-# Function to update the listbox with Switch games
 def update_listbox():
     switch_games = get_switch_games("roms/switch")
     listbox.delete(0, tk.END)

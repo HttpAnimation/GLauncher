@@ -49,7 +49,7 @@ sidebar.pack(side=tk.LEFT, fill=tk.Y)
 switch_button = tk.Button(sidebar, text="Switch", command=update_listbox, bg='#404040', fg=text_color)
 switch_button.pack(pady=10)
 
-listbox = tk.Listbox(root, selectmode=tk.SINGLE, bg='#2E2E2E', fg=text_color)  # Dark gray background
+listbox = tk.Listbox(root, selectmode=tk.SINGLE, bg='#2E2E2E', fg=text_color) 
 listbox.pack(expand=True, fill=tk.BOTH)
 
 listbox.bind("<<ListboxSelect>>", on_select)

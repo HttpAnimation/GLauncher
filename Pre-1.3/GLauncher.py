@@ -3,7 +3,6 @@ import tkinter as tk
 from tkinter import filedialog
 import pygame
 
-# Function to get a list of Switch games from the specified directory
 def get_switch_games(directory):
     switch_games = [file for file in os.listdir(directory) if file.endswith(('.xci', '.nsp'))]
     return switch_games

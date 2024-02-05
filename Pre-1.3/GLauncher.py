@@ -16,7 +16,6 @@ def update_listbox():
     for game in switch_games:
         listbox.insert(tk.END, game)
 
-# Function to handle the selection event
 def on_select(event):
     selected_index = listbox.curselection()
     if selected_index:

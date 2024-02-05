@@ -1,20 +1,7 @@
-import os
 import tkinter as tk
 from tkinter import filedialog
 import json
-
-def get_supported_formats():
-    try:
-        with open('configs/formats/switch.json', 'r') as formats_file:
-            formats = json.load(formats_file)
-            return formats.get('supported_formats', ['.xci', '.nsp'])
-    except (FileNotFoundError, json.JSONDecodeError, KeyError):
-        return ['.xci', '.nsp']
-
-def get_switch_games(directory):
-    supported_formats = get_supported_formats()
-    switch_games = [file for file in os.listdir(directory) if file.endswith(tuple(supported_formats))]
-    return switch_games
+import switch
 
 def get_emulator_command(emulator_name):
     try:
@@ -30,7 +17,7 @@ def launch_emulator(emulator_name, rom_path):
         os.system(f"{command} '{rom_path}'")
 
 def update_listbox():
-    switch_games = get_switch_games("roms/switch")
+    switch_games = switch.get_switch_games("roms/switch")
     listbox.delete(0, tk.END)
     for game in switch_games:
         listbox.insert(tk.END, game)

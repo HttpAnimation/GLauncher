@@ -5,7 +5,7 @@ import switch
 
 def get_emulator_command(emulator_name):
     try:
-        with open('configs/config.json', 'r') as config_file:
+        with open('configs/switch.json', 'r') as config_file:
             config = json.load(config_file)
             return config.get(emulator_name, "")
     except (FileNotFoundError, json.JSONDecodeError):

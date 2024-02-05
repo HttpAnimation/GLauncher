@@ -35,7 +35,6 @@ switch_button.pack(pady=10)
 listbox = tk.Listbox(root, selectmode=tk.SINGLE)
 listbox.pack(expand=True, fill=tk.BOTH)
 
-# Bind the selection event to the on_select function
 listbox.bind("<<ListboxSelect>>", on_select)
 
 # Run the Tkinter main loop
